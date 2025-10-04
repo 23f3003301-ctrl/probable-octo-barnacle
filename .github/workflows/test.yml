@@ -1,7 +1,14 @@
+name: Email Test Action
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - name: 23f3003301@ds.study.iitm.ac.in
         run: echo "Hello, world!"
-      
+
