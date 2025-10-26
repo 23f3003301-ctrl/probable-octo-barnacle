@@ -1,0 +1,41 @@
+name: Daily commit (daily-commit.yml)
+
+on:
+  schedule:
+    - cron: '15 2 * * *'   # <-- change this to the exact minute/hour you want (UTC)
+  workflow_dispatch:       # allows manual triggering for testing
+
+permissions:
+  contents: write
+
+jobs:
+  add-daily-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Commit timestamp file - 23f3003301@ds.study.iitm.ac.in
+        # ^-- REPLACE youremail@example.com with your actual email text exactly
+        run: |
+          set -e
+          TARGET_FILE=".github/daily-commit-log.txt"
+          mkdir -p "$(dirname "$TARGET_FILE")"
+          echo "Run at: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "$TARGET_FILE"
+          echo "Triggered by: $GITHUB_ACTOR" >> "$TARGET_FILE"
+          echo "---" >> "$TARGET_FILE"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "actions@github.com"
+
+          git add "$TARGET_FILE"
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore: update daily commit log (from workflow run)"
+          git push
