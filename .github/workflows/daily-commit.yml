@@ -2,7 +2,7 @@ name: Daily commit (daily-commit.yml)
 
 on:
   schedule:
-    - cron: '15 2 * * *'   # <-- change this to the exact minute/hour you want (UTC)
+    - cron: '29 7 * * *'   # <-- change this to the exact minute/hour you want (UTC)
   workflow_dispatch:       # allows manual triggering for testing
 
 permissions:
